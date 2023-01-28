@@ -1,0 +1,16 @@
+[flake8]
+# Ignored errors (basically, obey Black):
+ignore = [
+    # line too long
+    E501,
+    # line break before binary operator
+    W503,
+    # expected 2 blank lines, found 1
+    E302,
+    # unused variable
+    F841
+]
+per-file-ignores = [
+    # imported but unused
+    __init__.py: F401
+]
