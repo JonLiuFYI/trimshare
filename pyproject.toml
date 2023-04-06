@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "trimshare"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["JonLiuFYI <2997583+JonLiuFYI@users.noreply.github.com>"]
 license = "GPL-3.0-or-later"

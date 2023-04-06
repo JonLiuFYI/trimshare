@@ -5,7 +5,7 @@ from trimshare.trimshare import infer_out_video_name
 
 
 def test_version():
-    assert __version__ == "0.1.0"
+    assert __version__ == "0.2.0"
 
 
 @freeze_time("2001-01-01 01:01:01")

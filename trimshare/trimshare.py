@@ -24,6 +24,7 @@ Options:
     -s --starttime <t>      Start the clip at this point in time. If unspecified, start at 0:00 on the source video.
     -e --endtime <t>        End the clip at this point in time. If unspecified, stop at the end of the source video.
     -q --quality <qual>     Set output vp9 quality (CRF mode), 0-63. Lower is better. [default: 50]
+    -v --vresolution <px>   Change the resolution of the outputted video. Give the new vertical resolution in pixels and the horizontal resolution will scale automatically.
     --debug                 Show debugging info while this runs.
     -h --help               Show this help info.
     --version               Show the version number of trimshare.
@@ -34,7 +35,7 @@ import subprocess as sp
 
 from docopt import docopt
 
-VERSION = "trimshare 0.1.0"
+VERSION = "trimshare 0.2.0"
 
 
 def infer_out_video_name(outname: str | None, inname: str) -> str:
@@ -90,17 +91,22 @@ def main():
     end_time = args.endtime
     out_video = infer_out_video_name(args.o, in_video)
     qual = args.quality
+    vresolution = args.vresolution
     logging.debug(
         "Given args:\n"
         f"\t{in_video = }\n"
         f"\t{start_time = }\n"
         f"\t{end_time = }\n"
         f"\t{out_video = }\n"
-        f"\t{qual = }"
+        f"\t{qual = }\n"
+        f"\t{vresolution = }"
     )
 
     start_time_arg = ["-ss", start_time] if start_time is not None else []
     end_time_arg = ["-to", end_time] if end_time is not None else []
+    vresolution_arg = (
+        ["-vf", f"scale=-1:{vresolution}"] if vresolution is not None else []
+    )
 
     # fmt: off
     pass1 = [
@@ -111,6 +117,7 @@ def main():
         "-c:v", "libvpx-vp9",
         "-b:v", "0",
         "-crf", qual,
+        *vresolution_arg,
         "-row-mt", "1",
         "-pass", "1",
         "-an",
@@ -125,6 +132,7 @@ def main():
         "-c:v", "libvpx-vp9",
         "-b:v", "0",
         "-crf", qual,
+        *vresolution_arg,
         "-row-mt", "1",
         "-pass", "2",
         out_video,
